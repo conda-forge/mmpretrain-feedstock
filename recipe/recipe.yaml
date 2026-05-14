@@ -12,14 +12,20 @@ source:
     - model-index.patch
 
 build:
-  number: 0
+  number: 1
   skip:
+    # Windows is blocked until mmcv provides win-64 builds.
     - win
     # mmcv does not publish Python 3.13 builds yet.
     - match(python, ">=3.13")
   script: python -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
+  build:
+    - if: build_platform != target_platform
+      then:
+        - cross-python_${{ target_platform }}
+        - python
   host:
     - pip
     - python
